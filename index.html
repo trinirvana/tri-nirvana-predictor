@@ -1,0 +1,603 @@
+import React, { useState } from 'react';
+
+const TriathlonPredictor = () => {
+  const [distance, setDistance] = useState('sichonUltimate');
+  const [swimPace, setSwimPace] = useState('2:00');
+  const [bikeSpeed, setBikeSpeed] = useState(30);
+  const [runPace, setRunPace] = useState('5:30');
+  const [experience, setExperience] = useState('intermediate');
+  
+  // Personal details
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  
+  // Environmental factors
+  const [temperature, setTemperature] = useState(25);
+  const [windSpeed, setWindSpeed] = useState(10);
+  const [precipitation, setPrecipitation] = useState('none');
+  const [waterType, setWaterType] = useState('lake');
+  
+  // Terrain factors
+  const [bikeElevation, setBikeElevation] = useState(100);
+  const [runElevation, setRunElevation] = useState(50);
+  const [courseType, setCourseType] = useState('road');
+  
+  // UI state
+  const [results, setResults] = useState(null);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [calculationProgress, setCalculationProgress] = useState(0);
+  
+  // Simulate calculation and set results
+  const calculateAndSave = () => {
+    setIsCalculating(true);
+    setCalculationProgress(0);
+    
+    const progressInterval = setInterval(() => {
+      setCalculationProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(progressInterval);
+          return 100;
+        }
+        return prev + 5;
+      });
+    }, 50);
+    
+    // Simulate AI processing time
+    setTimeout(() => {
+      setResults({
+        swim: "15:45",
+        bike: "48:12",
+        run: "32:08",
+        t1: "3:10",
+        t2: "2:20",
+        total: "1:41:35",
+        belt: "green",
+        impacts: {
+          swim: {
+            waterType: "5.0%",
+            temperature: "2.4%"
+          },
+          bike: {
+            temperature: "2.4%",
+            wind: "2.0%",
+            precipitation: "0.0%",
+            elevation: "2.5%"
+          },
+          run: {
+            temperature: "2.4%",
+            precipitation: "0.0%",
+            elevation: "3.0%",
+            courseType: "0.0%"
+          }
+        }
+      });
+      clearInterval(progressInterval);
+      setCalculationProgress(100);
+      
+      // Complete the calculation animation
+      setTimeout(() => {
+        setIsCalculating(false);
+      }, 500);
+    }, 1500);
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto p-4 bg-white rounded-lg shadow">
+      <h1 className="text-2xl font-bold text-center text-blue-600 mb-2">🏊‍♂️ 🚴‍♂️ 🏃‍♂️ Tri Nirvana AI Race Predictor</h1>
+      <p className="text-center text-blue-500 mb-6">Powered by advanced AI and Coach Sam's training methodology</p>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Input Form */}
+        <div className="space-y-4">
+          {/* Personal Details */}
+          <div className="bg-blue-50 p-4 rounded-md">
+            <h3 className="font-bold text-lg text-gray-700 mb-3">👤 Your Details</h3>
+            
+            <div className="space-y-3">
+              <div>
+                <label className="block text-gray-700 mb-1">
+                  📧 Email Address <span className="text-red-500">*</span>
+                </label>
+                <input 
+                  type="email" 
+                  className="w-full p-2 border rounded"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your.email@example.com"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-gray-700 mb-1">
+                  👤 Full Name
+                </label>
+                <input 
+                  type="text" 
+                  className="w-full p-2 border rounded"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Your Name"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-gray-700 mb-1">
+                  📱 Phone Number
+                </label>
+                <input 
+                  type="tel" 
+                  className="w-full p-2 border rounded"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Your Phone Number"
+                />
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">
+              🏁 Race Distance
+            </label>
+            <select 
+              className="w-full p-2 border rounded"
+              value={distance}
+              onChange={(e) => setDistance(e.target.value)}
+            >
+              <option value="sichonUltimate">🌊 Sichon Ultimate 1v1 (500m | 15km | 3.5km)</option>
+              <option value="sprint">🔋 Sprint (750m | 20km | 5km)</option>
+              <option value="olympic">🏅 Olympic (1.5km | 40km | 10km)</option>
+              <option value="70.3">🔆 Half Ironman 70.3 (1.9km | 90km | 21.1km)</option>
+              <option value="ironman">🔱 Ironman (3.8km | 180km | 42.2km)</option>
+              <option value="norseman">❄️ Norseman Extreme (3.8km | 180km | 42.2km)</option>
+            </select>
+          </div>
+          
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">
+              📊 Experience Level
+            </label>
+            <select 
+              className="w-full p-2 border rounded"
+              value={experience}
+              onChange={(e) => setExperience(e.target.value)}
+            >
+              <option value="beginner">🔰 Beginner</option>
+              <option value="intermediate">⭐ Intermediate</option>
+              <option value="advanced">⭐⭐ Advanced</option>
+              <option value="elite">🏆 Elite</option>
+            </select>
+          </div>
+          
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">
+              🏊‍♂️ Swim Pace: {swimPace} min/100m
+            </label>
+            <div className="flex items-center">
+              <span className="mr-2 text-sm">1:00</span>
+              <input 
+                type="range" 
+                className="w-full"
+                min="60"
+                max="240"
+                value={swimPace === '2:00' ? 120 : 120}
+                onChange={(e) => {
+                  const seconds = parseInt(e.target.value);
+                  const mins = Math.floor(seconds / 60);
+                  const secs = seconds % 60;
+                  setSwimPace(`${mins}:${secs.toString().padStart(2, '0')}`);
+                }}
+              />
+              <span className="ml-2 text-sm">4:00</span>
+            </div>
+          </div>
+          
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">
+              🚴‍♂️ Bike Speed: {bikeSpeed} km/h
+            </label>
+            <div className="flex items-center">
+              <span className="mr-2 text-sm">15</span>
+              <input 
+                type="range" 
+                className="w-full"
+                min="15"
+                max="60"
+                value={bikeSpeed}
+                onChange={(e) => setBikeSpeed(Number(e.target.value))}
+              />
+              <span className="ml-2 text-sm">60</span>
+            </div>
+          </div>
+          
+          <div>
+            <label className="block text-gray-700 font-medium mb-2">
+              🏃‍♂️ Run Pace: {runPace} min/km
+            </label>
+            <div className="flex items-center">
+              <span className="mr-2 text-sm">2:00</span>
+              <input 
+                type="range" 
+                className="w-full"
+                min="120"
+                max="600"
+                value={runPace === '5:30' ? 330 : 330}
+                onChange={(e) => {
+                  const seconds = parseInt(e.target.value);
+                  const mins = Math.floor(seconds / 60);
+                  const secs = seconds % 60;
+                  setRunPace(`${mins}:${secs.toString().padStart(2, '0')}`);
+                }}
+              />
+              <span className="ml-2 text-sm">10:00</span>
+            </div>
+          </div>
+          
+          {/* Advanced options toggle */}
+          <button 
+            className="w-full p-2 bg-blue-100 text-blue-700 rounded font-medium mt-4 flex items-center justify-center"
+            onClick={() => setShowAdvanced(!showAdvanced)}
+          >
+            {showAdvanced ? "🔍 Hide Advanced Options" : "🔍 Show Advanced Options"}
+          </button>
+          
+          {/* Advanced options */}
+          {showAdvanced && (
+            <div className="border-t pt-4 mt-4 space-y-4">
+              <h3 className="font-bold text-lg text-gray-700">🌊 Swim Conditions</h3>
+              
+              <div>
+                <label className="block text-gray-700 mb-1">
+                  💧 Water Type
+                </label>
+                <select 
+                  className="w-full p-2 border rounded"
+                  value={waterType}
+                  onChange={(e) => setWaterType(e.target.value)}
+                >
+                  <option value="pool">🏊 Pool</option>
+                  <option value="lake">🏞️ Lake</option>
+                  <option value="sea">🌊 Sea/Ocean</option>
+                </select>
+              </div>
+              
+              <h3 className="font-bold text-lg text-gray-700 mt-4">🌤️ Weather Conditions</h3>
+              
+              <div>
+                <label className="block text-gray-700 mb-1">
+                  🌡️ Air Temperature: {temperature}°C
+                </label>
+                <div className="flex items-center">
+                  <span className="mr-2 text-sm">5</span>
+                  <input 
+                    type="range" 
+                    className="w-full"
+                    min="5"
+                    max="40"
+                    value={temperature}
+                    onChange={(e) => setTemperature(Number(e.target.value))}
+                  />
+                  <span className="ml-2 text-sm">40</span>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-gray-700 mb-1">
+                  💨 Wind Speed: {windSpeed} km/h
+                </label>
+                <div className="flex items-center">
+                  <span className="mr-2 text-sm">0</span>
+                  <input 
+                    type="range" 
+                    className="w-full"
+                    min="0"
+                    max="50"
+                    value={windSpeed}
+                    onChange={(e) => setWindSpeed(Number(e.target.value))}
+                  />
+                  <span className="ml-2 text-sm">50</span>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-gray-700 mb-1">
+                  🌧️ Precipitation
+                </label>
+                <select 
+                  className="w-full p-2 border rounded"
+                  value={precipitation}
+                  onChange={(e) => setPrecipitation(e.target.value)}
+                >
+                  <option value="none">☀️ None</option>
+                  <option value="light">🌦️ Light Rain</option>
+                  <option value="heavy">⛈️ Heavy Rain</option>
+                </select>
+              </div>
+              
+              {/* Terrain factors section */}
+              <h3 className="font-bold text-lg text-gray-700 mt-4">⛰️ Terrain Factors</h3>
+              
+              <div>
+                <label className="block text-gray-700 mb-1">
+                  🚵‍♂️ Bike Elevation Gain: {bikeElevation} meters
+                </label>
+                <div className="flex items-center">
+                  <span className="mr-2 text-sm">0</span>
+                  <input 
+                    type="range" 
+                    className="w-full"
+                    min="0"
+                    max="5000"
+                    step="50"
+                    value={bikeElevation}
+                    onChange={(e) => setBikeElevation(Number(e.target.value))}
+                  />
+                  <span className="ml-2 text-sm">5000</span>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-gray-700 mb-1">
+                  🏃‍♂️ Run Elevation Gain: {runElevation} meters
+                </label>
+                <div className="flex items-center">
+                  <span className="mr-2 text-sm">0</span>
+                  <input 
+                    type="range" 
+                    className="w-full"
+                    min="0"
+                    max="2000"
+                    step="25"
+                    value={runElevation}
+                    onChange={(e) => setRunElevation(Number(e.target.value))}
+                  />
+                  <span className="ml-2 text-sm">2000</span>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-gray-700 mb-1">
+                  🛣️ Course Type (Run)
+                </label>
+                <select 
+                  className="w-full p-2 border rounded"
+                  value={courseType}
+                  onChange={(e) => setCourseType(e.target.value)}
+                >
+                  <option value="road">🛣️ Road</option>
+                  <option value="trail">🌳 Trail</option>
+                  <option value="technical">🧗‍♂️ Technical Trail</option>
+                  <option value="sand">🏝️ Beach/Sand</option>
+                </select>
+              </div>
+            </div>
+          )}
+          
+          {/* Calculate Button */}
+          <div className="mt-6">
+            <button 
+              className="w-full p-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-md font-bold text-lg shadow-md hover:shadow-lg transform hover:scale-105 transition duration-200 flex items-center justify-center"
+              onClick={calculateAndSave}
+              disabled={isCalculating}
+            >
+              {isCalculating ? (
+                <>
+                  <div className="relative mr-3 h-6 w-6">
+                    {/* Brain animation during calculation */}
+                    <svg className="animate-pulse" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                    {/* Circular progress indicator */}
+                    <svg className="absolute inset-0 -rotate-90" viewBox="0 0 100 100">
+                      <circle
+                        className="text-gray-200"
+                        strokeWidth="8"
+                        stroke="currentColor"
+                        fill="transparent"
+                        r="40"
+                        cx="50"
+                        cy="50"
+                      />
+                      <circle
+                        className="text-white"
+                        strokeWidth="8"
+                        strokeDasharray={251.2}
+                        strokeDashoffset={251.2 - (calculationProgress / 100) * 251.2}
+                        strokeLinecap="round"
+                        stroke="currentColor"
+                        fill="transparent"
+                        r="40"
+                        cx="50"
+                        cy="50"
+                      />
+                    </svg>
+                  </div>
+                  AI Analyzing Data...
+                </>
+              ) : (
+                <>
+                  🧠 CALCULATE MY PREDICTION WITH AI
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+        
+        {/* Results */}
+        {results && (
+          <div className="bg-gray-50 p-6 rounded-lg border">
+            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
+              <span className="text-blue-600 mr-2">🧠</span>
+              AI-Generated Race Prediction
+            </h2>
+            
+            {isCalculating ? (
+              <div className="flex flex-col items-center justify-center py-12">
+                <div className="relative h-24 w-24 mb-4">
+                  {/* Neural network animation */}
+                  <svg className="animate-pulse absolute" width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="48" cy="12" r="4" fill="#4F46E5" className="animate-pulse"/>
+                    <circle cx="24" cy="36" r="4" fill="#4F46E5" className="animate-pulse"/>
+                    <circle cx="48" cy="36" r="4" fill="#4F46E5" className="animate-pulse"/>
+                    <circle cx="72" cy="36" r="4" fill="#4F46E5" className="animate-pulse"/>
+                    <circle cx="24" cy="60" r="4" fill="#4F46E5" className="animate-pulse"/>
+                    <circle cx="48" cy="60" r="4" fill="#4F46E5" className="animate-pulse"/>
+                    <circle cx="72" cy="60" r="4" fill="#4F46E5" className="animate-pulse"/>
+                    <circle cx="48" cy="84" r="4" fill="#4F46E5" className="animate-pulse"/>
+                    
+                    <line x1="48" y1="16" x2="24" y2="32" stroke="#4F46E5" strokeWidth="1"/>
+                    <line x1="48" y1="16" x2="48" y2="32" stroke="#4F46E5" strokeWidth="1"/>
+                    <line x1="48" y1="16" x2="72" y2="32" stroke="#4F46E5" strokeWidth="1"/>
+                    
+                    <line x1="24" y1="40" x2="24" y2="56" stroke="#4F46E5" strokeWidth="1"/>
+                    <line x1="24" y1="40" x2="48" y2="56" stroke="#4F46E5" strokeWidth="1"/>
+                    <line x1="48" y1="40" x2="24" y2="56" stroke="#4F46E5" strokeWidth="1"/>
+                    <line x1="48" y1="40" x2="48" y2="56" stroke="#4F46E5" strokeWidth="1"/>
+                    <line x1="48" y1="40" x2="72" y2="56" stroke="#4F46E5" strokeWidth="1"/>
+                    <line x1="72" y1="40" x2="48" y2="56" stroke="#4F46E5" strokeWidth="1"/>
+                    <line x1="72" y1="40" x2="72" y2="56" stroke="#4F46E5" strokeWidth="1"/>
+                    
+                    <line x1="24" y1="64" x2="48" y2="80" stroke="#4F46E5" strokeWidth="1"/>
+                    <line x1="48" y1="64" x2="48" y2="80" stroke="#4F46E5" strokeWidth="1"/>
+                    <line x1="72" y1="64" x2="48" y2="80" stroke="#4F46E5" strokeWidth="1"/>
+                  </svg>
+                </div>
+                <p className="text-blue-600 font-medium mb-2">AI Engine Processing Your Data</p>
+                <div className="w-full max-w-md bg-gray-200 rounded-full h-2.5">
+                  <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${calculationProgress}%` }}></div>
+                </div>
+                <p className="mt-2 text-gray-500 text-sm">Analyzing factors and computing prediction...</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="bg-blue-100 p-3 rounded flex justify-between">
+                  <span>🏊‍♂️ Swim</span>
+                  <span className="font-bold">{results.swim}</span>
+                </div>
+                
+                <div className="bg-yellow-100 p-3 rounded flex justify-between">
+                  <span>🔄 T1</span>
+                  <span className="font-bold">{results.t1}</span>
+                </div>
+                
+                <div className="bg-green-100 p-3 rounded flex justify-between">
+                  <span>🚴‍♂️ Bike</span>
+                  <span className="font-bold">{results.bike}</span>
+                </div>
+                
+                <div className="bg-yellow-100 p-3 rounded flex justify-between">
+                  <span>🔄 T2</span>
+                  <span className="font-bold">{results.t2}</span>
+                </div>
+                
+                <div className="bg-red-100 p-3 rounded flex justify-between">
+                  <span>🏃‍♂️ Run</span>
+                  <span className="font-bold">{results.run}</span>
+                </div>
+                
+                <div className="bg-indigo-600 text-white p-4 rounded flex justify-between items-center mt-4">
+                  <span className="text-lg">⏱️ TOTAL TIME</span>
+                  <span className="text-xl font-bold">{results.total}</span>
+                </div>
+                
+                <div className="bg-purple-100 p-4 rounded mt-4">
+                  <div className="flex justify-between items-center">
+                    <span>🥋 Tri Nirvana Belt Rank:</span>
+                    <span className="px-3 py-1 bg-white rounded-full font-bold capitalize">
+                      {results.belt} Belt
+                    </span>
+                  </div>
+                </div>
+                
+                {showAdvanced && (
+                  <div className="mt-4 space-y-3">
+                    <h3 className="text-lg font-bold text-gray-700">📊 Performance Impact Factors</h3>
+                    
+                    <div className="bg-blue-50 p-3 rounded">
+                      <h4 className="font-medium mb-1">🏊‍♂️ Swim Factors:</h4>
+                      <div className="text-sm">
+                        {results.impacts && (
+                          <>
+                            <div className="flex justify-between">
+                              <span>💧 Water Type:</span>
+                              <span>{results.impacts.swim.waterType}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>🌡️ Temperature:</span>
+                              <span>{results.impacts.swim.temperature}</span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="bg-green-50 p-3 rounded">
+                      <h4 className="font-medium mb-1">🚴‍♂️ Bike Factors:</h4>
+                      <div className="text-sm">
+                        {results.impacts && (
+                          <>
+                            <div className="flex justify-between">
+                              <span>🌡️ Temperature:</span>
+                              <span>{results.impacts.bike.temperature}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>💨 Wind:</span>
+                              <span>{results.impacts.bike.wind}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>🌧️ Precipitation:</span>
+                              <span>{results.impacts.bike.precipitation}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>⛰️ Elevation:</span>
+                              <span>{results.impacts.bike.elevation}</span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="bg-red-50 p-3 rounded">
+                      <h4 className="font-medium mb-1">🏃‍♂️ Run Factors:</h4>
+                      <div className="text-sm">
+                        {results.impacts && (
+                          <>
+                            <div className="flex justify-between">
+                              <span>🌡️ Temperature:</span>
+                              <span>{results.impacts.run.temperature}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>🌧️ Precipitation:</span>
+                              <span>{results.impacts.run.precipitation}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>⛰️ Elevation:</span>
+                              <span>{results.impacts.run.elevation}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>🛣️ Course Type:</span>
+                              <span>{results.impacts.run.courseType}</span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      
+      <div className="mt-6 text-center text-sm text-gray-500 flex items-center justify-center">
+        <span className="mr-1">💪</span> Powered by <span className="font-bold ml-1 mr-1 text-blue-600">AI</span> and Coach Sam's IronJit training methodology 
+        <span className="ml-1">🧠</span>
+      </div>
+    </div>
+  );
+};
+
+export default TriathlonPredictor;
